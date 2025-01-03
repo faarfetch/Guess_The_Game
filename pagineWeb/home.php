@@ -25,6 +25,9 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
 <body>
     <h1>home</h1>
+
+
+    <a href="../gestori/gestoreLogout.php">logout</a>
 </body>
 
 </html>

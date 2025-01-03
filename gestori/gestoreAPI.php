@@ -37,7 +37,7 @@ class GestoreAPI
         return $gameNames;
     }
 
-    public function refreshGameFile()//NON UTILIZZATO
+    public function refreshGameFile() //NON UTILIZZATO
     {
         $gameNames = $this->getAllGamesName();
         $filePath = "../files/gamelist.json";
@@ -75,7 +75,7 @@ class GestoreAPI
         }
     }
 
-    public function getGameInfo($id)
+    public function getGameInfo($id) //funaziona anche con il nome del gioco
     {
         if (!is_numeric($id)) {
             $id = $this->getGameId($id);
@@ -132,35 +132,26 @@ class GestoreAPI
 
 
 $API = new GestoreAPI();
+print "<pre>";
 //print_r($API->getGameList()); 
-//print_r($API->getGameId("The Witcher 3: Wild Hunt"));
-//print_r($API->getGameInfo(3498)); 
-//print_r($API->getGameInfo("Outer Wilds"));
+//print_r($API->getGameId("ultrakill"));
+for ($i=1; $i >0; $i++) { 
+    if(isset($API->getGameInfo($i)["id"])){
+        print_r($API->getGameInfo($i));
+        break;
+    }
+
+}
+//num of id 995589
+//print_r($API->getGameInfo("dark souls"));
 //print_r($API->getGameScreenShots(3498));
 //print_r($API->getGameScreenShots("Outer Wilds"));
 //print_r($API->getGameAchievements(3498));
 //print_r($API->getGameAchievements("hollow knight"));
 //tutte chiamate funzionanti che altri file possono utilizzare
-
+print "</pre>";
 /*
 foreach($API->getGameScreenShots("Outer Wilds")['results'] as $screenshot) {
     echo "<img src='" . $screenshot['image'] . "' alt=''>";
 }
 */
-?>
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-    <h1>prova</h1>
-
-</body>
-
-</html>

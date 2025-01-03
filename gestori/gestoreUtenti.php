@@ -1,5 +1,5 @@
-<?php
-require_once("../classes/utente.php");
+<?php  
+//gestore degli utenti
 
 class gestoreUtenti
 {

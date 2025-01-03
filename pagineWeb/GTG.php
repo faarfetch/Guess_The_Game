@@ -21,6 +21,8 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
 <body>
     <h1>Guess The Game</h1>
-</body>
 
+    <a href="home.php">home</a>
+    <a href="../gestori/gestoreLogout.php">logout</a>
+</body>
 </html>

@@ -1,6 +1,5 @@
 <?php
-//pagina utilizzarla per la fase di recap di tutte le modalita 
-//da la possibilita di ripartire subito con un altra partita
+//modalita di gioco alternativa
 if (!isset($_SESSION)) {
     session_start();
 }
@@ -21,7 +20,7 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 </head>
 
 <body>
-    <h1>recap Parita</h1>
+    <h1>Guess The SceenShot</h1>
 </body>
 
 </html>

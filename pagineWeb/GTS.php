@@ -20,7 +20,7 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 </head>
 
 <body>
-    <h1>Guess The SceenShot</h1>
+    <h1>Guess The ScreenShot</h1>
 
     <a href="home.php">home</a>
     <a href="../gestori/gestoreLogout.php">logout</a>

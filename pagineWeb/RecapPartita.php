@@ -21,7 +21,7 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 </head>
 
 <body>
-    <h1>recap Parita</h1>
+    <h1>recap Partita</h1>
 
 
 

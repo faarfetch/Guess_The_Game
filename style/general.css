@@ -3,7 +3,7 @@
 }
 
 body {
-    background-image: url('../../other/preview.jpg');
+    background-image: url("../files/imgs/sfondo.png");
     background-color: rgba(0, 0, 0, 0.8);
     background-blend-mode: darken;
 }

@@ -1,6 +1,6 @@
 <?php
 
-echo("<style>
+echo ("<style>
     .header {
         position: sticky;
         top: 0;

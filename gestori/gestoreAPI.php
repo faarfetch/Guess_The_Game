@@ -130,7 +130,7 @@ class GestoreAPI
     }
 }
 
-
+/*
 $API = new GestoreAPI();
 print "<pre>";
 //print_r($API->getGameList()); 
@@ -155,3 +155,4 @@ foreach($API->getGameScreenShots("Outer Wilds")['results'] as $screenshot) {
     echo "<img src='" . $screenshot['image'] . "' alt=''>";
 }
 */
+

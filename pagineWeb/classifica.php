@@ -12,14 +12,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Classifica</title>
 </head>
+<link rel="stylesheet" href="../style/general.css">
+
 
 <body>
+<?php include 'header.php'; ?>
+
     <h1>Classifica</h1>
-    <?php
-
-
-    ?>
-    <a href="home.php">home</a>
 </body>
 
 </html>

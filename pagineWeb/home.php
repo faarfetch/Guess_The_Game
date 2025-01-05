@@ -20,71 +20,64 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home</title>
 </head>
+
+<link rel="stylesheet" href="../style/general.css">
 <style>
-    #container {
-        width: auto;
+
+    #container .scelte-container {
         display: flex;
-        margin-left: 15px;
-        text-align: center;
+        flex-direction: row;
+        gap: 15px;
 
-    }
-
-    div {
-        border-color: black;
-        text-align: center;
     }
 </style>
 
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-
-        //const divContainer=document.getElementById("container");
-        let divScelte = document.getElementsByClassName("scelte");
-
-        for (let div of divScelte) {
-
-
-            div.addEventListener("click", function () {  
-                let nome=div.id;
-                if(nome==="daily")
-                    window.location.href = "GTG.php"; 
-                else   
-                    window.location.href = nome+".php";
-             })
-        }
-
-    })
-
-
-</script>
-
 <body>
-    
-<h1>Scegli cosa fare!</h1>
-    <?php
-    $scelteUtente = [
-        "modalità",
-        "classifica",
-        "daily"
-    ];
 
-    echo "<div id=container>";
-    foreach ($scelteUtente as $value) {
-        echo "<div id=$value class=scelte>";
-        echo "<img src=../files/imgs/$value.png alt=$value>
+    <?php include 'header.php'; ?>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            //const divContainer=document.getElementById("container");
+            let divScelte = document.getElementsByClassName("scelte");
+
+            for (let div of divScelte) {
+
+
+                div.addEventListener("click", function() {
+                    let nome = div.id;
+                    if (nome === "daily")
+                        window.location.href = "GTG.php";
+                    else
+                        window.location.href = nome + ".php";
+                })
+            }
+
+        })
+    </script>
+
+    <div id="container">
+        <h1>Scegli cosa fare!</h1>
+        <div class="scelte-container">
+            <?php
+            $scelteUtente = [
+                "modalità",
+                "classifica",
+                "daily"
+            ];
+
+            foreach ($scelteUtente as $value) {
+                echo "<div id=$value class='scelte'>";
+                echo "<img src='../files/imgs/$value.png' alt='$value'>
                     <br>
-                    <label for=$value>$value</label>";
-
-        echo "</div>";
-    }
-
-
-
-    echo "</div>";
-    ?>
-
-
-    <a href="../gestori/gestoreLogout.php">logout</a>
+                    <label for='$value'>$value</label>";
+                echo "</div>";
+            }
+            ?>
+        </div>
+        
+    </div>
 </body>
 
 </html>

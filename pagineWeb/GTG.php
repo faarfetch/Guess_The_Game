@@ -18,11 +18,12 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
 </head>
+<link rel="stylesheet" href="../style/general.css">
 
 <body>
+<?php include 'header.php'; ?>
     <h1>Guess The Game</h1>
 
-    <a href="home.php">home</a>
-    <a href="../gestori/gestoreLogout.php">logout</a>
+
 </body>
 </html>

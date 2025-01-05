@@ -1,0 +1,21 @@
+* {
+    color: white;
+}
+
+body {
+    background-image: url('../../other/preview.jpg');
+    background-color: rgba(0, 0, 0, 0.8);
+    background-blend-mode: darken;
+}
+
+#container {
+    width: auto;
+    display: flex;
+    margin-left: 15px;
+    text-align: center;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100vh;
+    padding-top: 20px;
+}

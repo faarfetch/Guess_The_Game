@@ -34,39 +34,44 @@ if (isset($_GET["message"])) {
         }
     </script>
 </head>
+<link rel="stylesheet" href="../style/general.css">
 
 <body>
-    <button onclick="toggleForm('login')">Login</button>
-    <button onclick="toggleForm('register')">Registrazione</button>
+    <div id="container">
+        <div style="display: flex;">
+            <button onclick="toggleForm('login')" style="color: black;">Login</button>
+            <button onclick="toggleForm('register')" style="color: black;">Registrazione</button>
+        </div>
+        <div id="loginForm" style="display: none;">
+            <h2>Login</h2>
+            <form action="../gestori/gestoreLogin.php" method="post">
+                <label for="loginUsername">Username</label>
+                <input type="text" name="username" id="loginUsername" style="color: black;"><br>
+                <label for="loginPassword">Password</label>
+                <input type="password" name="password" id="loginPassword" style="color: black;"><br>
+                <input type="submit" value="Login" style="color: black;">
+            </form>
+        </div>
 
-    <div id="loginForm" style="display: none;">
-        <h2>Login</h2>
-        <form action="../gestori/gestoreLogin.php" method="post">
-            <label for="loginUsername">Username</label>
-            <input type="text" name="username" id="loginUsername"><br>
-            <label for="loginPassword">Password</label>
-            <input type="password" name="password" id="loginPassword"><br>
-            <input type="submit" value="Login">
-        </form>
+        <div id="registerForm" style="display: none;">
+            <h2>Registrazione</h2>
+            <form action="../gestori/gestoreLogin.php" method="post">
+                <label for="registerUsername">Username</label>
+                <input type="text" name="username" id="registerUsername" style="color: black;"><br>
+                <label for="registerPassword">Password</label>
+                <input type="password" name="password" id="registerPassword" style="color: black;"><br>
+                <label for="registerPassword2">Conferma Password</label>
+                <input type="password" name="password2" id="registerPassword2" style="color: black;"><br>
+                <input type="submit" value="Registrati" style="color: black;">
+            </form>
+        </div>
+
+        <script>
+            // Default to showing the login form
+            toggleForm('login');
+        </script>
+
     </div>
-
-    <div id="registerForm" style="display: none;">
-        <h2>Registrazione</h2>
-        <form action="../gestori/gestoreLogin.php" method="post">
-            <label for="registerUsername">Username</label>
-            <input type="text" name="username" id="registerUsername"><br>
-            <label for="registerPassword">Password</label>
-            <input type="password" name="password" id="registerPassword"><br>
-            <label for="registerPassword2">Conferma Password</label>
-            <input type="password" name="password2" id="registerPassword2"><br>
-            <input type="submit" value="Registrati">
-        </form>
-    </div>
-
-    <script>
-        // Default to showing the login form
-        toggleForm('login');
-    </script>
 </body>
 
 </html>

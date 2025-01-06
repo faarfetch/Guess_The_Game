@@ -16,17 +16,16 @@ class gestioreGioco
     public function __construct()
     {
         $this->API = new GestoreAPI();
-
     }
 
     public function getRandomGame($modalita)
     {
-        file_put_contents('../files/game/currentGame.csv', ''); 
+        file_put_contents('../files/game/currentGame.csv', '');
         file_get_contents('../files/altro/gamelist.json');
         $games = json_decode(file_get_contents('../files/altro/gamelist.json'), true);
         $randomIndex = array_rand($games);
         print_r($games[$randomIndex]);
-        if($modalita==="GTG")
+        if ($modalita === "GTG")
             return  $this->getGameInfo($games[$randomIndex]);
         else
             return $this->getGameImages($games[$randomIndex]);
@@ -132,7 +131,7 @@ class gestioreGioco
     public function guess()
     {
         $numOfGuesses = count(file("../files/game/currentGame.csv"));
-        if($numOfGuesses == 9){
+        if ($numOfGuesses == 9) {
             //file_put_contents('../files/game/currentGame.csv', '');
             header("Location: recapPartita.php?msg=hai perso");
             exit();
@@ -154,7 +153,7 @@ class gestioreGioco
         $classArray = $this->getClassArray($guessInfoArray);
 
 
-        echo("<div>vite rimanenti: " . (9 - $numOfGuesses) . "</div>");
+        echo ("<div>vite rimanenti: " . (9 - $numOfGuesses) . "</div>");
         for ($i = 0; $i < $numOfGuesses + 1; $i++) {
             $gameInfo = $this->getGameInfoFromCSV($i);
             $classArray = $this->getClassArray($this->checkCorrectAnswer($gameInfo));
@@ -166,8 +165,8 @@ class gestioreGioco
     {
 
 
-        if(!isset($_SESSION['answer'])){
-            $_SESSION['answer'] = $this->getRandomGame();
+        if (!isset($_SESSION['answer'])) {
+            $_SESSION['answer'] = $this->getRandomGame("GTG");
         }
         $correctAnswer = $_SESSION['answer'];
 
@@ -268,6 +267,25 @@ class gestioreGioco
 
         return $classArray;
     }
+
+    public function addWin()
+    {
+
+        if (isset($_SESSION["username"])) {
+            $username = $_SESSION["username"];
+            $file = file_get_contents('../files/users/users.csv');
+            $users = explode("\n", $file);
+            $newFile = "";
+            foreach ($users as $user) {
+                $campi = explode(";", $user);
+                if (count($campi) >= 3 && $campi[0] == $username) {
+                    $campi[2] = $campi[2] + 1;
+                }
+                $newFile .= implode(";", $campi) . "\n";
+            }
+            file_put_contents('../files/users/users.csv', $newFile);
+        }
+    }
 }
 $gioco = new gestioreGioco();
 /*
@@ -276,5 +294,3 @@ print_r($gioco->getGameInfo("sekiro"));
 //print_r($gioco->getGameImages("hollow knight"));
 print "</pre>";
 */
-
-?>

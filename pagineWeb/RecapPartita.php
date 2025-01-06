@@ -9,6 +9,21 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
     exit();
 }
 
+if (isset($_SESSION["game"]) && $_SESSION["game"] == "WIN") {
+    include_once '../gestori/gestoreGioco.php';
+    $gestoreGioco = new gestioreGioco();
+    $gestoreGioco->addWin();
+}
+
+
+if (isset($_SESSION["game"]) && $_SESSION["game"] != "") {
+    $_SESSION["game"] = "";
+}
+
+if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
+    $_SESSION["answer"] = "";
+}
+
 
 ?>
 <!DOCTYPE html>
@@ -22,29 +37,33 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 <link rel="stylesheet" href="../style/general.css">
 
 <body>
-    <?php include 'header.php';
-    if (isset($_GET["msg"])) {
-        echo ("<h1>" . $_GET["msg"] . "</h1>");
-    }
-    echo "<h1>Riepilogo Partita</h1>";
+    <?php include 'header.php'; ?>
 
-    $numOfGuesses = count(file("../files/game/currentGame.csv"));
-    echo "Tentativi effettuati: ".$numOfGuesses."<br>";
+    <div id="container">
+        <?php
+        if (isset($_GET["msg"])) {
+            echo ("<h1>" . $_GET["msg"] . "</h1>");
+        }
+        echo "<h1>Riepilogo Partita</h1>";
+
+        $numOfGuesses = count(file("../files/game/currentGame.csv"));
+        echo "Tentativi effettuati: " . $numOfGuesses . "<br>";
 
 
-    $currentGame = file_get_contents("../files/game/currentGame.csv");
-    //echo $currentGame;
+        $currentGame = file_get_contents("../files/game/currentGame.csv");
+        //echo $currentGame;
 
-    $tentativi=explode("\n", $currentGame);
-    //print_r($tentativi);
+        $tentativi = explode("\n", $currentGame);
+        //print_r($tentativi);
 
-    foreach ($tentativi as $tentativo) {
-        $caratteristicheGioco=explode(";", $tentativo);
-        echo $caratteristicheGioco[0]."<br>";
-    }
-    ?>
+        foreach ($tentativi as $tentativo) {
+            $caratteristicheGioco = explode(";", $tentativo);
+            echo $caratteristicheGioco[0] . "<br>";
+        }
+        ?>
 
-    <a href="GTG.php"><button style>Gioca ancora!</button></a>
+        <a href="GTG.php"><button style="color: black;">Gioca ancora!</button></a>
+    </div>
 </body>
 
 </html>

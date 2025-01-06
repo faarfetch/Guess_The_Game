@@ -15,8 +15,12 @@
 <link rel="stylesheet" href="../style/general.css">
 
 <body>
-    <h1>index</h1>
-    <a href="login.php">login</a><br>
+    <?php include 'header.php'; ?>
+    <div id="container">
+
+        <h1>BENVENUTI A GUESS THE GAME!!!</h1>
+        <a href="login.php"><img src="../files/imgs/login.png" alt="Login" style="width: 100px; height: auto;"></a><br>
+    </div>
 </body>
 
 </html>

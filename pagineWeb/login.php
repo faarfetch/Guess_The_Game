@@ -10,9 +10,6 @@ if (isset($_SESSION["autenticato"])) {
         exit();
     }
 }
-if (isset($_GET["message"])) {
-    echo ("<h1>" . $_GET["message"] . "</h1>");
-}
 
 ?>
 <!DOCTYPE html>
@@ -36,8 +33,16 @@ if (isset($_GET["message"])) {
 </head>
 <link rel="stylesheet" href="../style/general.css">
 
+
 <body>
+    <?php include 'header.php'; ?>
     <div id="container">
+        <?php
+        if (isset($_GET["message"])) {
+            echo ("<h1 style='color: red'>" . $_GET["message"] . "</h1>");
+        }
+        ?>
+
         <div style="display: flex;">
             <button onclick="toggleForm('login')" style="color: black;">Login</button>
             <button onclick="toggleForm('register')" style="color: black;">Registrazione</button>

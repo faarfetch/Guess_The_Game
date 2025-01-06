@@ -4,38 +4,53 @@
 class gestoreUtenti
 {
 
-    public function __construct()
-    {
-    }
+    public function __construct() {}
 
     public function login($nome, $password)
     {
-        /*$filePath = "../files/users/users.csv";
-        if (file_exists($filePath)) {
-            $userData = json_decode(file_get_contents($filePath), true);
-
-            if ($userData['password'] == $password) {
+        $filePath = file_get_contents("../files/users/users.csv");
+        $utenti = explode("\n", $filePath);
+        foreach ($utenti as $utente) {
+            $campi = explode(";", $utente);
+            if (count($campi) >= 2 && $campi[0] == $nome && $campi[1] == $password) { // username;pwd;punteggio
                 return 1;
             }
         }
-        return 0;*/
-
-        $filePath = file_get_contents("../files/users/users.csv");
-        $utenti=explode("\r\n", $filePath);
-        foreach ($utenti as $utente) {
-            $campi=explode(";", $utente);
-            if($campi[1]==$password) // username;pwd;punteggio
-                return 1;
-        }
-
         return 0;
     }
 
     public function registrazione($nome, $password)
     {
         $filePath = "../files/users/users.csv";
-        $userData = $nome . ";" . $password . ";" . "0";
-        file_put_contents($filePath, $userData);
+        $fileContent = file_get_contents($filePath);
+        $utenti = explode("\n", $fileContent);
+        
+        foreach ($utenti as $utente) {
+            $campi = explode(";", $utente);
+            if (count($campi) >= 2 && $campi[0] == $nome) {
+                return 0; // Username already exists
+            }
+        }
+        
+        $userData = $nome . ";" . $password . ";" . "0" . "\n";
+        file_put_contents($filePath, $userData, FILE_APPEND);
         return 1;
+    }
+
+    public function getClassifica()
+    {
+        $filePath = file_get_contents("../files/users/users.csv");
+        $utenti = explode("\n", $filePath);
+        $classifica = array();
+        foreach ($utenti as $utente) {
+            $campi = explode(";", $utente);
+            if (count($campi) == 3) {
+                $classifica[] = array("username" => $campi[0], "punteggio" => $campi[2]);
+            }
+        }
+        usort($classifica, function ($a, $b) {
+            return $b['punteggio'] - $a['punteggio'];
+        });
+        return array_slice($classifica, 0, 50);
     }
 }

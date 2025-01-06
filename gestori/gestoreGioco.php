@@ -7,15 +7,20 @@ class gestioreGioco
 {
 
     private $API;
+    private $correctAnswer;
+    private $guessNumber;
 
     public function __construct()
     {
         $this->API = new GestoreAPI();
+        $this->correctAnswer = $this->getRandomGame();
+        $this->guessNumber = 0;
+
     }
 
     public function getRandomGame()
     {
-        
+        return $this->getGameInfo("hollow knight");
     }
 
     public function getGameInfo($nomeGioco)
@@ -51,10 +56,11 @@ class gestioreGioco
         return $gameInfo;
     }
 
-    public function getGameImages($nomeGioco){
+    public function getGameImages($nomeGioco)
+    {
         $APIresponse = $this->API->getGameScreenShots($nomeGioco);
 
-        foreach($APIresponse["results"] as $screenshot){
+        foreach ($APIresponse["results"] as $screenshot) {
             $screenshots[] = $screenshot["image"];
         }
 
@@ -73,17 +79,17 @@ class gestioreGioco
     public function saveGameInfo($gameInfo)
     {
         $file = fopen('../files/game/currentGame.csv', 'a');
-        $gameInfoString = 
-            $gameInfo["nome"].";".
-            $gameInfo["data"].";".
-            $gameInfo["playtime"].";".
-            $gameInfo["immagine"]." ;".
-            $gameInfo["rating"].";".
-            $gameInfo["meta"].";".
-            $this->getStringFromArray($gameInfo["generi"]).";".
-            $this->getStringFromArray($gameInfo["tags"]).";".
-            $this->getStringFromArray($gameInfo["publishers"]).";".
-            $this->getStringFromArray($gameInfo["platforms"])."\n";
+        $gameInfoString =
+            $gameInfo["nome"] . ";" .
+            $gameInfo["data"] . ";" .
+            $gameInfo["playtime"] . ";" .
+            $gameInfo["immagine"] . " ;" .
+            $gameInfo["rating"] . ";" .
+            $gameInfo["meta"] . ";" .
+            $this->getStringFromArray($gameInfo["generi"]) . ";" .
+            $this->getStringFromArray($gameInfo["tags"]) . ";" .
+            $this->getStringFromArray($gameInfo["publishers"]) . ";" .
+            $this->getStringFromArray($gameInfo["platforms"]) . "\n";
         fwrite($file, $gameInfoString);
         fclose($file);
     }
@@ -111,10 +117,146 @@ class gestioreGioco
         return $gameInfoArray;
     }
 
+    public function guess()
+    {
+        if($this->guessNumber == 10){
+            file_put_contents('../files/game/currentGame.csv', '');
+            header("Location: recapPartita.php?msg=hai perso");
+            exit();
+        }
+        $this->guessNumber++;
+
+        $gameInfo = $this->getGameInfo($_POST['guess']);
+
+
+        $guessInfoArray = $this->checkCorrectAnswer($gameInfo);
+        if ($guessInfoArray == 1) {
+            //passo a pagina di fine round
+            //delete currentGame.csv
+            file_put_contents('../files/game/currentGame.csv', '');
+            header("Location: recapPartita.php?msg=hai vinto");
+            exit();
+        }
+        
+        $currentGameLines = count(file("../files/game/currentGame.csv"));
+        $this->saveGameInfo($gameInfo);
+
+
+        $classArray = $this->getClassArray($guessInfoArray);
+
+
+        echo("<div>vite rimanenti: " . (10 - $this->guessNumber) . "</div>");
+        for ($i = 0; $i < $currentGameLines + 1; $i++) {
+            $gameInfo = $this->getGameInfoFromCSV($i);
+            $classArray = $this->getClassArray($this->checkCorrectAnswer($gameInfo));
+            $this->printHTML($gameInfo, $classArray);
+        }
+    }
+
+    public function checkCorrectAnswer($gameInfo)
+    {
+        if ($gameInfo['nome'] == $this->correctAnswer['nome']) {
+            return 1;
+        }
+        $mMu = [
+            "playtime",
+            "rating",
+            "meta"
+        ];
+        $arrays = [
+            "generi",
+            "tags",
+            "publishers",
+            "platforms"
+        ];
+
+
+        if (strtotime($gameInfo["data"]) > strtotime($this->correctAnswer["data"])) {
+            $guessInfoArray["data"] = "maggiore";
+        } else if (strtotime($gameInfo["data"]) < strtotime($this->correctAnswer["data"])) {
+            $guessInfoArray["data"] = "minore";
+        } else if (strtotime($gameInfo["data"]) == strtotime($this->correctAnswer["data"])) {
+            $guessInfoArray["data"] = "uguale";
+        }
+
+
+        foreach ($mMu as $key => $nome) {
+            if ($gameInfo[$nome] > $this->correctAnswer[$nome]) {
+                $guessInfoArray[$nome] = "maggiore";
+            } else if ($gameInfo[$nome] < $this->correctAnswer[$nome]) {
+                $guessInfoArray[$nome] = "minore";
+            } else if ($gameInfo[$nome] == $this->correctAnswer[$nome]) {
+                $guessInfoArray[$nome] = "uguale";
+            }
+        }
+
+        foreach ($arrays as $key => $nome) {
+            $guessInfoArray[$nome] = count(array_diff($gameInfo[$nome], $this->correctAnswer[$nome]));
+        }
+
+        return $guessInfoArray;
+    }
+
+
+
+    public function printHTML($gameInfo, $classArray)
+    {
+        if ($gameInfo['meta'] == null) {
+            $gameInfo['meta'] = "N/A";
+        }
+        echo ("<div class='guess'>");
+        echo ("<div class='guess_element' style='background-image: url(" . $gameInfo['immagine'] . ");'>" . $gameInfo['nome'] . "</div>");
+        echo ("<div class='guess_element " . $classArray["data"] . "'>" . $gameInfo['data'] . "</div>");
+        echo ("<div class='guess_element " . $classArray["playtime"] . "'>" . $gameInfo['playtime'] . "</div>");
+        echo ("<div class='guess_element " . $classArray["generi"] . "'>" . $this->getStringFromArray($gameInfo['generi']) . "</div>");
+        echo ("<div class='guess_element " . $classArray["tags"] . "'>" . $this->getStringFromArray($gameInfo['tags']) . "</div>");
+        echo ("<div class='guess_element " . $classArray["platforms"] . "'>" . $this->getStringFromArray($gameInfo['platforms']) . "</div>");
+        echo ("<div class='guess_element " . $classArray["publishers"] . "'>" . $this->getStringFromArray($gameInfo['publishers']) . "</div>");
+        echo ("<div class='guess_element " . $classArray["rating"] . "'>" . $gameInfo['rating'] . "</div>");
+        echo ("<div class='guess_element " . $classArray["meta"] . "' style='background-image: url(\"../files/imgs/Metacritic.png\");'>" . $gameInfo['meta'] . "</div>");
+        echo ("</div>");
+    }
+
+    private function getClassArray($guessInfoArray)
+    {
+        $classArray = array();
+
+        $mMu = [
+            "data",
+            "playtime",
+            "rating",
+            "meta"
+        ];
+        $arrays = [
+            "generi",
+            "tags",
+            "publishers",
+            "platforms"
+        ];
+
+
+        foreach ($mMu as $key => $name) {
+            $classArray[$name] = $guessInfoArray[$name];
+        }
+
+        foreach ($arrays as $key => $name) {
+            if ($guessInfoArray[$name] == 0) {
+                $classArray[$name] = "giusto";
+            }
+            if ($guessInfoArray[$name] > 0) {
+                $classArray[$name] = "quasi";
+            }
+            if ($guessInfoArray[$name] > 3) {
+                $classArray[$name] = "sbagliato";
+            }
+        }
+
+        return $classArray;
+    }
 }
 $gioco = new gestioreGioco();
 print "<pre>";
-//print_r($gioco->getGameInfo("hollow knight"));
+//print_r($gioco->getGameInfo("stellar Blade"));
 //print_r($gioco->getGameImages("hollow knight"));
 print "</pre>";
 

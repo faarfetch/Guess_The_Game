@@ -26,17 +26,41 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
         border: 2px solid #fff;
         border-radius: 10px;
         padding: 10px;
-        height: 50px;
         margin: 0px 5px;
         background-color: rgba(0, 0, 0, 0.8);
         background-blend-mode: darken;
         background-size: cover;
+        background-position: center;
     }
 
     .guess {
         display: flex;
         margin: 20px;
 
+    }
+
+    .maggiore {
+        background-image: url("../files/imgs/frecciaGiu.png");
+    }
+
+    .minore {
+        background-image: url("../files/imgs/frecciaSu.png");
+    }
+
+    .ugule {
+        background-color: rgba(51, 255, 0, 0.56);
+    }
+
+    .giusto {
+        background-color: rgba(51, 255, 0, 0.56);
+    }
+
+    .quasi {
+        background-color: rgba(238, 255, 0, 0.56);
+    }
+
+    .sbagliato {
+        background-color: rgba(255, 0, 0, 0.56);
     }
 </style>
 
@@ -53,28 +77,7 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
             if (isset($_POST['submit'])) {
                 include '../gestori/gestoreGioco.php';
                 $gestoreGioco = new gestioreGioco();
-                $gameInfo = $gestoreGioco->getGameInfo($_POST['guess']);
-
-
-                //count lines in currentGame
-                $currentGameLines = count(file("../files/game/currentGame.csv"));
-
-                $gestoreGioco->saveGameInfo($gameInfo);
-
-                for ($i = 0; $i < $currentGameLines+1; $i++) {
-                    $gameInfo = $gestoreGioco->getGameInfoFromCSV($i);
-                    echo ("<div class='guess'>");
-                    echo ("<div class='nome guess_element' style='background-image: url(" . $gameInfo['immagine'] . ");''>" . $gameInfo['nome'] . "</div>");
-                    echo ("<div class='data guess_element'>" . $gameInfo['data'] . "</div>");
-                    echo ("<div class='playtime guess_element'>" . $gameInfo['playtime'] . "</div>");
-                    echo ("<div class='generi guess_element'>" . $gestoreGioco->getStringFromArray($gameInfo['generi']) . "</div>");
-                    echo ("<div class='tags guess_element'>" . $gestoreGioco->getStringFromArray($gameInfo['tags']) . "</div>");
-                    echo ("<div class='piattaforma guess_element'>" . $gestoreGioco->getStringFromArray($gameInfo['platforms']) . "</div>");
-                    echo ("<div class='publishers guess_element'>" . $gestoreGioco->getStringFromArray($gameInfo['publishers']) . "</div>");
-                    echo ("<div class='voto guess_element'>" . $gameInfo['rating'] . "</div>");
-                    echo ("<div class='metacritic guess_element' style='background-image: url('../files/imgs/Metacritic.png');'>" . $gameInfo['meta'] . "</div>");
-                    echo ("</div>");
-                }
+                $gestoreGioco->guess($_POST['guess']);
             }
             ?>
 

@@ -1,5 +1,10 @@
 <?php
 //gestore degli utenti
+if (!isset($_SESSION)) {
+    session_start();
+}
+
+
 require_once("gestoreAPI.php");
 
 
@@ -7,25 +12,28 @@ class gestioreGioco
 {
 
     private $API;
-    private $correctAnswer;
-    private $guessNumber;
 
     public function __construct()
     {
         $this->API = new GestoreAPI();
-        $this->correctAnswer = $this->getRandomGame();
-        $this->guessNumber = 0;
 
     }
 
     public function getRandomGame()
     {
-        return $this->getGameInfo("hollow knight");
+        file_get_contents('../files/altro/gamelist.json');
+        $games = json_decode(file_get_contents('../files/altro/gamelist.json'), true);
+        $randomIndex = array_rand($games);
+        print_r($games[$randomIndex]);
+        return  $this->getGameInfo($games[$randomIndex]);
     }
 
     public function getGameInfo($nomeGioco)
     {
-        $APIresponse = $this->API->getGameInfo($nomeGioco);
+
+        do {
+            $APIresponse = $this->API->getGameInfo($nomeGioco);
+        } while ($APIresponse == null);
 
         foreach ($APIresponse["genres"] as $genere) {
             $generi[] = $genere["name"];
@@ -119,34 +127,31 @@ class gestioreGioco
 
     public function guess()
     {
-        if($this->guessNumber == 10){
+        $numOfGuesses = count(file("../files/game/currentGame.csv"));
+        if($numOfGuesses == 9){
             file_put_contents('../files/game/currentGame.csv', '');
             header("Location: recapPartita.php?msg=hai perso");
             exit();
         }
-        $this->guessNumber++;
 
         $gameInfo = $this->getGameInfo($_POST['guess']);
 
 
         $guessInfoArray = $this->checkCorrectAnswer($gameInfo);
         if ($guessInfoArray == 1) {
-            //passo a pagina di fine round
-            //delete currentGame.csv
             file_put_contents('../files/game/currentGame.csv', '');
-            header("Location: recapPartita.php?msg=hai vinto");
-            exit();
+            $_SESSION["game"] = "WIN";
+
+            return 1;
         }
-        
-        $currentGameLines = count(file("../files/game/currentGame.csv"));
         $this->saveGameInfo($gameInfo);
 
 
         $classArray = $this->getClassArray($guessInfoArray);
 
 
-        echo("<div>vite rimanenti: " . (10 - $this->guessNumber) . "</div>");
-        for ($i = 0; $i < $currentGameLines + 1; $i++) {
+        echo("<div>vite rimanenti: " . (9 - $numOfGuesses) . "</div>");
+        for ($i = 0; $i < $numOfGuesses + 1; $i++) {
             $gameInfo = $this->getGameInfoFromCSV($i);
             $classArray = $this->getClassArray($this->checkCorrectAnswer($gameInfo));
             $this->printHTML($gameInfo, $classArray);
@@ -155,7 +160,14 @@ class gestioreGioco
 
     public function checkCorrectAnswer($gameInfo)
     {
-        if ($gameInfo['nome'] == $this->correctAnswer['nome']) {
+
+
+        if(!isset($_SESSION['answer'])){
+            $_SESSION['answer'] = $this->getRandomGame();
+        }
+        $correctAnswer = $_SESSION['answer'];
+
+        if ($gameInfo['nome'] == $correctAnswer['nome']) {
             return 1;
         }
         $mMu = [
@@ -170,28 +182,27 @@ class gestioreGioco
             "platforms"
         ];
 
-
-        if (strtotime($gameInfo["data"]) > strtotime($this->correctAnswer["data"])) {
+        if (strtotime($gameInfo["data"]) > strtotime($correctAnswer["data"])) {
             $guessInfoArray["data"] = "maggiore";
-        } else if (strtotime($gameInfo["data"]) < strtotime($this->correctAnswer["data"])) {
+        } else if (strtotime($gameInfo["data"]) < strtotime($correctAnswer["data"])) {
             $guessInfoArray["data"] = "minore";
-        } else if (strtotime($gameInfo["data"]) == strtotime($this->correctAnswer["data"])) {
+        } else if (strtotime($gameInfo["data"]) == strtotime($correctAnswer["data"])) {
             $guessInfoArray["data"] = "uguale";
         }
 
 
         foreach ($mMu as $key => $nome) {
-            if ($gameInfo[$nome] > $this->correctAnswer[$nome]) {
+            if ($gameInfo[$nome] > $correctAnswer[$nome]) {
                 $guessInfoArray[$nome] = "maggiore";
-            } else if ($gameInfo[$nome] < $this->correctAnswer[$nome]) {
+            } else if ($gameInfo[$nome] < $correctAnswer[$nome]) {
                 $guessInfoArray[$nome] = "minore";
-            } else if ($gameInfo[$nome] == $this->correctAnswer[$nome]) {
+            } else if ($gameInfo[$nome] == $correctAnswer[$nome]) {
                 $guessInfoArray[$nome] = "uguale";
             }
         }
 
         foreach ($arrays as $key => $nome) {
-            $guessInfoArray[$nome] = count(array_diff($gameInfo[$nome], $this->correctAnswer[$nome]));
+            $guessInfoArray[$nome] = count(array_diff($gameInfo[$nome], $correctAnswer[$nome]));
         }
 
         return $guessInfoArray;
@@ -255,10 +266,12 @@ class gestioreGioco
     }
 }
 $gioco = new gestioreGioco();
+/*
 print "<pre>";
-//print_r($gioco->getGameInfo("stellar Blade"));
+print_r($gioco->getGameInfo("sekiro"));
 //print_r($gioco->getGameImages("hollow knight"));
 print "</pre>";
+*/
 
 ?>
 

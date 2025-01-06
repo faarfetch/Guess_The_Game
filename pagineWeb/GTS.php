@@ -10,28 +10,31 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
 include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
-if(!isset($_SESSION["game"]) || $_SESSION["game"] == ""){
+if (!isset($_SESSION["game"]) || $_SESSION["game"] == "") {
     $_SESSION["game"] = "GTS";
-    $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
-    print_r($_SESSION["answer"]["nome"]);
+    $_SESSION["screenAnswer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
+    //print_r($_SESSION["screenAnswer"]["game"]);
+    print ($_SESSION["screenAnswer"]);
 
 }
 
-if((isset($_SESSION["answer"]) && ($_SESSION["answer"] != ""))){
-    print_r($_SESSION["answer"]["nome"]);
+if ((isset($_SESSION["screenAnswer"]) && ($_SESSION["screenAnswer"] != ""))) {
+    //print_r($_SESSION["screenAnswer"]);
 }
 
-if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
+if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
 
-    if($_SESSION["game"] == "WIN"){
+    if ($_SESSION["game"] == "WIN") {
         $_SESSION["game"] = "";
-        $_SESSION["answer"] = "";
+        $_SESSION["screenAnswer"] = "";
         //print_r("palle");
         header("location: RecapPartita.php?msg=hai vinto");
         exit();
     }
 
 }
+
+
 
 ?>
 <!DOCTYPE html>
@@ -47,7 +50,12 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
 <body>
     <?php include 'header.php'; ?>
     <div id="container">
-        <h1>Guess The ScreenShot</h1>
+        <h1>Guess The Screenshot</h1>
+
+        <?php
+
+        ?>
+
         <form method="post" action="">
             <input type="text" name="guess" id="guess" style="color: black;" onkeyup="showSuggestions(this.value)">
             <button type="submit" name="submit" style="color: black;">Indovina!</button>
@@ -56,15 +64,23 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
             </div>
         </form>
         <div id="guesses">
-            <?php
-            if (isset($_POST['submit'])) {
-                $gestoreGioco = new gestioreGioco();
-                if ($gestoreGioco->guess($_POST['guess']) == 1) {
 
-                    header("location: recapPartita.php?msg=hai vinto");
-                    exit();
-                }
+            <?php
+            $gestoreGioco = new gestioreGioco();
+
+            if (!isset($_POST["guess"])) {
+                $giocoDaIndovinare = $_SESSION["screenAnswer"];
+                $screenGioco = $gestoreGioco->getGameImages($giocoDaIndovinare);
+                echo "<img src=$screenGioco[0] alt=>";
             }
+
+            //print_r($_SESSION["screenAnswer"]);
+
+            if (isset($_POST["guess"]))
+                $gestoreGioco->giocoScreen($_POST["guess"]);
+
+
+
             ?>
 
         </div>
@@ -72,7 +88,10 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
 
 
 </body>
+
 <script>
+    //visualizzare la lista di suggerimenti
+
     let games = <?php echo json_encode(file_get_contents('../files/altro/gamelist.json')); ?>;
     games = JSON.parse(games);
 

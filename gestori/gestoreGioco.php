@@ -3,10 +3,7 @@
 if (!isset($_SESSION)) {
     session_start();
 }
-
-
 require_once("gestoreAPI.php");
-
 
 class gestioreGioco
 {
@@ -26,9 +23,57 @@ class gestioreGioco
         $randomIndex = array_rand($games);
         print_r($games[$randomIndex]);
         if ($modalita === "GTG")
-            return  $this->getGameInfo($games[$randomIndex]);
+            return $this->getGameInfo($games[$randomIndex]);
         else
-            return $this->getGameImages($games[$randomIndex]);
+            return $games[$randomIndex];
+    }
+
+    public function giocoScreen($guess)
+    {
+
+        $giocoDaIndovinare = $_SESSION["screenAnswer"];
+        $screenGioco = $this->getGameImages($giocoDaIndovinare);
+        $this->stampaScreen($screenGioco);
+
+        $vite = sizeof($screenGioco);
+        echo ("<div>vite rimanenti: " . $vite-count(file("../files/game/currentGame.csv")) . "</div>");
+
+        if ($this->controlloGuess($guess)) {
+            header("location: ../recapPartita.php?msg=hai vinto");
+            exit;
+        } else {
+            file_put_contents('../files/game/currentGame.csv', $guess . "\n", FILE_APPEND);
+            if ($vite == count(file("../files/game/currentGame.csv"))) {
+                header("location: ../RecapPartita.php?msg=hai perso");
+                exit;
+            }
+        }
+    }
+
+    public function stampaScreen($screenGioco)
+    {
+        if ($this->getTentativi() < 5) {
+
+            echo "<div id=screens>";
+            echo "<img src=" . $screenGioco[$this->getTentativi()] . " style='width: 50px heigth: 50px;'>";
+            echo "</div>";
+        }
+    }
+
+    function getTentativi()
+    {
+        return count(file('../files/game/currentGame.csv'));
+    }
+
+    function controlloGuess($guess)
+    {
+
+        if ($guess === $_SESSION["screenAnswer"]) {
+            return 1;
+        }
+
+        return 0;
+
     }
 
     public function getGameInfo($nomeGioco)
@@ -161,6 +206,7 @@ class gestioreGioco
         }
     }
 
+
     public function checkCorrectAnswer($gameInfo)
     {
 
@@ -210,7 +256,6 @@ class gestioreGioco
 
         return $guessInfoArray;
     }
-
 
 
     public function printHTML($gameInfo, $classArray)
@@ -286,6 +331,8 @@ class gestioreGioco
             file_put_contents('../files/users/users.csv', $newFile);
         }
     }
+
+
 }
 $gioco = new gestioreGioco();
 /*

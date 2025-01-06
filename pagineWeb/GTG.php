@@ -88,9 +88,6 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
     }
 </style>
 
-
-
-
 <body>
     <?php include 'header.php'; ?>
     <div id="container">

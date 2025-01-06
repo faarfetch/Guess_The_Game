@@ -64,7 +64,6 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
             $scelteUtente = [
                 "modalità",
                 "classifica",
-                "daily"
             ];
 
             foreach ($scelteUtente as $value) {

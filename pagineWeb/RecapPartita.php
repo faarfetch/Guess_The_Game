@@ -44,7 +44,7 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
     }
     ?>
 
-    <a href="GTG.php"><button>Gioca ancora!</button></a>
+    <a href="GTG.php"><button style>Gioca ancora!</button></a>
 </body>
 
 </html>

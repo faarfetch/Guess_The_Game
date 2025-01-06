@@ -11,7 +11,7 @@ include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
 if(!isset($_SESSION["game"]) || $_SESSION["game"] == ""){
     $_SESSION["game"] = "GTG";
-    $_SESSION["answer"] = $gestoreGioco->getRandomGame();
+    $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
     print_r($_SESSION["answer"]["nome"]);
 
 }
@@ -25,7 +25,7 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
     if($_SESSION["game"] == "WIN"){
         $_SESSION["game"] = "";
         $_SESSION["answer"] = "";
-        print_r("palle");
+        //print_r("palle");
         header("location: RecapPartita.php?msg=hai vinto");
         exit();
     }

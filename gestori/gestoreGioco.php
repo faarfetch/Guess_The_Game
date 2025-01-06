@@ -19,14 +19,17 @@ class gestioreGioco
 
     }
 
-    public function getRandomGame()
+    public function getRandomGame($modalita)
     {
         file_put_contents('../files/game/currentGame.csv', ''); 
         file_get_contents('../files/altro/gamelist.json');
         $games = json_decode(file_get_contents('../files/altro/gamelist.json'), true);
         $randomIndex = array_rand($games);
         print_r($games[$randomIndex]);
-        return  $this->getGameInfo($games[$randomIndex]);
+        if($modalita==="GTG")
+            return  $this->getGameInfo($games[$randomIndex]);
+        else
+            return $this->getGameImages($games[$randomIndex]);
     }
 
     public function getGameInfo($nomeGioco)

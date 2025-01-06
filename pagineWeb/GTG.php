@@ -88,7 +88,36 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
     }
 </style>
 
-<script>
+
+
+
+<body>
+    <?php include 'header.php'; ?>
+    <div id="container">
+        
+        <h1>Guess The Game</h1>
+        <form method="post" action="">
+            <input type="text" name="guess" id="guess" style="color: black;" onkeyup="showSuggestions(this.value)">
+            <button type="submit" name="submit" style="color: black;">Indovina!</button>
+            <div id="suggestions" style="border: 1px solid #ccc; background-color: black; max-height: 150px; overflow-y: auto; display: none;"></div>
+        </form>
+        <div id="guesses">
+            <?php
+            if (isset($_POST['submit'])) {
+                $gestoreGioco = new gestioreGioco();
+                if($gestoreGioco->guess($_POST['guess'])==1){
+                    
+                    header("location: recapPartita.php?msg=hai vinto");
+                    exit();
+                }
+            }
+            ?>
+
+        </div>
+
+    </div>
+
+    <script>
     let games = <?php echo json_encode(file_get_contents('../files/altro/gamelist.json')); ?>;
     games = JSON.parse(games);
 
@@ -125,31 +154,6 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
         });
     }
 </script>
-
-
-<body>
-    <?php include 'header.php'; ?>
-    <div id="container">
-        <h1>Guess The Game</h1>
-        <form method="post" action="">
-            <input type="text" name="guess" id="guess" style="color: black;" onkeyup="showSuggestions(this.value)">
-            <button type="submit" name="submit" style="color: black;">Indovina!</button>
-            <div id="suggestions" style="border: 1px solid #ccc; background-color: black; max-height: 150px; overflow-y: auto; display: none;"></div>
-        </form>
-        <div id="guesses">
-            <?php
-            if (isset($_POST['submit'])) {
-                $gestoreGioco = new gestioreGioco();
-                if($gestoreGioco->guess($_POST['guess'])==1){
-                    header("location: recapPartita.php?msg=hai vinto");
-                    exit();
-                }
-            }
-            ?>
-
-        </div>
-
-    </div>
 
 </body>
 

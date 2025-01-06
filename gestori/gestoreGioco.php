@@ -21,6 +21,7 @@ class gestioreGioco
 
     public function getRandomGame()
     {
+        file_put_contents('../files/game/currentGame.csv', ''); 
         file_get_contents('../files/altro/gamelist.json');
         $games = json_decode(file_get_contents('../files/altro/gamelist.json'), true);
         $randomIndex = array_rand($games);
@@ -129,7 +130,7 @@ class gestioreGioco
     {
         $numOfGuesses = count(file("../files/game/currentGame.csv"));
         if($numOfGuesses == 9){
-            file_put_contents('../files/game/currentGame.csv', '');
+            //file_put_contents('../files/game/currentGame.csv', '');
             header("Location: recapPartita.php?msg=hai perso");
             exit();
         }
@@ -139,7 +140,7 @@ class gestioreGioco
 
         $guessInfoArray = $this->checkCorrectAnswer($gameInfo);
         if ($guessInfoArray == 1) {
-            file_put_contents('../files/game/currentGame.csv', '');
+            //file_put_contents('../files/game/currentGame.csv', '');
             $_SESSION["game"] = "WIN";
 
             return 1;
@@ -274,19 +275,3 @@ print "</pre>";
 */
 
 ?>
-
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-
-<body>
-
-</body>
-
-</html>

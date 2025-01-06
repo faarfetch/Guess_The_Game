@@ -17,14 +17,34 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Riepilogo Partita</title>
 </head>
 <link rel="stylesheet" href="../style/general.css">
 
 <body>
-<?php include 'header.php'; ?>
-    <h1>recap Partita</h1>
+    <?php include 'header.php';
+    if (isset($_GET["msg"])) {
+        echo ("<h1>" . $_GET["msg"] . "</h1>");
+    }
+    echo "<h1>Riepilogo Partita</h1>";
 
+    $numOfGuesses = count(file("../files/game/currentGame.csv"));
+    echo "Tentativi effettuati: ".$numOfGuesses."<br>";
+
+
+    $currentGame = file_get_contents("../files/game/currentGame.csv");
+    //echo $currentGame;
+
+    $tentativi=explode("\n", $currentGame);
+    //print_r($tentativi);
+
+    foreach ($tentativi as $tentativo) {
+        $caratteristicheGioco=explode(";", $tentativo);
+        echo $caratteristicheGioco[0]."<br>";
+    }
+    ?>
+
+    <a href="GTG.php"><button>Gioca ancora!</button></a>
 </body>
 
 </html>

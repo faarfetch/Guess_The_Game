@@ -14,38 +14,51 @@
 </head>
 <link rel="stylesheet" href="../style/general.css">
 
-<style>
-    
-</style>
-
 
 <body>
-<?php include 'header.php'; ?>
-<div id="container">
-    <h1>Classifica</h1>
+    <?php include 'header.php'; ?>
+    <div id="container">
+        <h1>Classifiche</h1>
+        <div style="display: flex; justify-content: space-around; gap: 200px;">
+            <div>
+                <?php
+                function stampaClassifica($classifica)
+                {
+                    $posizione = 1;
+                    echo "<table>";
+                    echo "<tr>";
+                    echo "<th>Posizione</th>";
+                    echo "<th>Username</th>";
+                    echo "<th>Punteggio</th>";
+                    echo "</tr>";
+                    foreach ($classifica as $utente) {
+                        echo "<tr>";
+                        echo "<td>" . $posizione . "</td>";
+                        echo "<td>" . $utente["username"] . "</td>";
+                        echo "<td>" . $utente["punteggio"] . "</td>";
+                        echo "</tr>";
+                        $posizione++;
+                    }
+                    echo "</table>";
+                }
 
-    <table>
-        <tr>
-            <th>Posizione</th>
-            <th>Username</th>
-            <th>Punteggio</th>
-        </tr>
-        <?php
-        include_once '../gestori/gestoreUtenti.php';
-        $gestoreUtente = new gestoreUtenti();
-        $classifica = $gestoreUtente->getClassifica();
-        $posizione = 1;
-        foreach ($classifica as $utente) {
-            echo "<tr>";
-            echo "<td>" . $posizione . "</td>";
-            echo "<td>" . $utente["username"] . "</td>";
-            echo "<td>" . $utente["punteggio"] . "</td>";
-            echo "</tr>";
-            $posizione++;
-        }
-        ?>
+                include_once '../gestori/gestoreUtenti.php';
+                $gestoreUtente = new gestoreUtenti();
 
-</div>
+                $classifica = $gestoreUtente->getClassifica("GTG");
+                echo "<h1>Classifica GTG</h1>";
+                stampaClassifica($classifica);
+                ?>
+            </div>
+            <div>
+                <?php
+                $classifica = $gestoreUtente->getClassifica("GTS");
+                echo "<h1>Classifica GTS</h1>";
+                stampaClassifica($classifica);
+                ?>
+            </div>
+        </div>
+    </div>
 
 
 </body>

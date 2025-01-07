@@ -25,7 +25,8 @@
                 function stampaClassifica($classifica)
                 {
                     $posizione = 1;
-                    echo "<table>";
+                    echo "<div style='text-align: center;'>"; // Center-align the wrapper div
+                    echo "<table style='margin: 0 auto;'>"; // Center the table
                     echo "<tr>";
                     echo "<th>Posizione</th>";
                     echo "<th>Username</th>";
@@ -40,6 +41,7 @@
                         $posizione++;
                     }
                     echo "</table>";
+                    echo "</div>"; // Close the wrapper div
                 }
 
                 include_once '../gestori/gestoreUtenti.php';

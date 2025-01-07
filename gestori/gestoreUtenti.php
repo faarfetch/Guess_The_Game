@@ -21,6 +21,10 @@ class gestoreUtenti
 
     public function registrazione($nome, $password)
     {
+        if (strpos($nome, ";") !== false || strpos($password, ";") !== false) {
+            return 0;
+        }
+
         $filePath = "../files/users/users.csv";
         $fileContent = file_get_contents($filePath);
         $utenti = explode("\n", $fileContent);

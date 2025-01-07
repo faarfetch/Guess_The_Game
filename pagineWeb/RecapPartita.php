@@ -70,7 +70,7 @@ if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
         
         ?>
 
-        <a href="home.php"><button style="color: black;">Gioca ancora!</button></a>
+        <a href="modalità.php"><button style="color: black;">Gioca ancora!</button></a>
     </div>
 </body>
 

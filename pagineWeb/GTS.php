@@ -31,9 +31,7 @@ if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
         header("location: RecapPartita.php?msg=hai vinto");
         exit();
     }
-
 }
-
 
 
 ?>
@@ -67,13 +65,11 @@ if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
             if (!isset($_POST["guess"])) {
                 $giocoDaIndovinare = $_SESSION["screenAnswer"];
                 $screenGioco = $gestoreGioco->getGameImages($giocoDaIndovinare);
-                echo "<img src=$screenGioco[0] alt=>";
+                $gestoreGioco->stampaImmagine($screenGioco[0]);
             }
 
             if (isset($_POST["guess"]))
-                $gestoreGioco->giocoScreen($_POST["guess"]);
-
-
+                $gestoreGioco->guessScreen($_POST["guess"]);
 
             ?>
 

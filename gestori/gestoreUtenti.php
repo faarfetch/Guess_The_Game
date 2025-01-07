@@ -32,20 +32,28 @@ class gestoreUtenti
             }
         }
         
-        $userData = $nome . ";" . $password . ";" . "0" . "\n";
+        $userData = $nome . ";" . $password . ";" . "0" . ";" . "0"."\n";
         file_put_contents($filePath, $userData, FILE_APPEND);
         return 1;
     }
 
-    public function getClassifica()
+    public function getClassifica($modalita)
     {
+
+        if($modalita == "GTG")
+            $campoGiusto = 2;
+        else if ($modalita == "GTS")
+            $campoGiusto = 3;
+        else
+            return;
+
         $filePath = file_get_contents("../files/users/users.csv");
         $utenti = explode("\n", $filePath);
         $classifica = array();
         foreach ($utenti as $utente) {
             $campi = explode(";", $utente);
-            if (count($campi) == 3) {
-                $classifica[] = array("username" => $campi[0], "punteggio" => $campi[2]);
+            if (count($campi) >= 3) {
+                $classifica[] = array("username" => $campi[0], "punteggio" => $campi[$campoGiusto]);
             }
         }
         usort($classifica, function ($a, $b) {

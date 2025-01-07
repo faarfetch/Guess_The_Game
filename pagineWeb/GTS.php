@@ -10,7 +10,7 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
 include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
-if (!isset($_SESSION["game"]) || $_SESSION["game"] == "") {
+if (!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTG") {
     $_SESSION["game"] = "GTS";
     $_SESSION["screenAnswer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
     //print_r($_SESSION["screenAnswer"]["game"]);
@@ -67,13 +67,14 @@ if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
             if (!isset($_POST["guess"])) {
                 $giocoDaIndovinare = $_SESSION["screenAnswer"];
                 $screenGioco = $gestoreGioco->getGameImages($giocoDaIndovinare);
-                echo "<img src=$screenGioco[0]>";
+                echo "<img src=$screenGioco[0] alt=>";
             }
-
-            //print_r($_SESSION["screenAnswer"]);
 
             if (isset($_POST["guess"]))
                 $gestoreGioco->giocoScreen($_POST["guess"]);
+
+
+
             ?>
 
         </div>

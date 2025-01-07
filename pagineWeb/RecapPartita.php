@@ -9,12 +9,16 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
     exit();
 }
 
-if (isset($_SESSION["game"]) && $_SESSION["game"] == "WIN") {
+if (isset($_SESSION["game"]) && $_SESSION["game"] == "WINGTG") {
     include_once '../gestori/gestoreGioco.php';
     $gestoreGioco = new gestioreGioco();
-    $gestoreGioco->addWin();
+    $gestoreGioco->addWin("GTG");
 }
-
+if (isset($_SESSION["game"]) && $_SESSION["game"] == "WINGTS") {
+    include_once '../gestori/gestoreGioco.php';
+    $gestoreGioco = new gestioreGioco();
+    $gestoreGioco->addWin("GTS");
+}
 
 if (isset($_SESSION["game"]) && $_SESSION["game"] != "") {
     $_SESSION["game"] = "";

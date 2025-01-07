@@ -21,14 +21,14 @@ class gestioreGioco
         file_get_contents('../files/altro/gamelist.json');
         $games = json_decode(file_get_contents('../files/altro/gamelist.json'), true);
         $randomIndex = array_rand($games);
-        //print_r($games[$randomIndex]);
+        print_r($games[$randomIndex]);
         if ($modalita === "GTG")
             return $this->getGameInfo($games[$randomIndex]);
         else
             return $games[$randomIndex];
     }
 
-    public function giocoScreen($guess)
+    public function guessScreen($guess)
     {
 
         $giocoDaIndovinare = $_SESSION["screenAnswer"];
@@ -39,12 +39,12 @@ class gestioreGioco
         echo ("<div>vite rimanenti: " . $vite-count(file("../files/game/currentGame.csv")) . "</div>");
 
         if ($this->controlloGuess($guess)) {
-            header("location: ../pagineWeb/RecapPartita.php?msg=hai vinto");
+            header("location: ../recapPartita.php?msg=hai vinto");
             exit;
         } else {
             file_put_contents('../files/game/currentGame.csv', $guess . "\n", FILE_APPEND);
             if ($vite == count(file("../files/game/currentGame.csv"))) {
-                header("location: ../pagineWeb/RecapPartita.php?msg=hai perso");
+                header("location: ../RecapPartita.php?msg=hai perso");
                 exit;
             }
         }
@@ -63,17 +63,6 @@ class gestioreGioco
     function getTentativi()
     {
         return count(file('../files/game/currentGame.csv'));
-    }
-
-    function controlloGuess($guess)
-    {
-
-        if ($guess === $_SESSION["screenAnswer"]) {
-            return 1;
-        }
-
-        return 0;
-
     }
 
     public function getGameInfo($nomeGioco)
@@ -134,7 +123,6 @@ class gestioreGioco
 
     public function saveGameInfo($gameInfo)
     {
-        $file = fopen('../files/game/currentGame.csv', 'a');
         $gameInfoString =
             $gameInfo["nome"] . ";" .
             $gameInfo["data"] . ";" .
@@ -146,8 +134,7 @@ class gestioreGioco
             $this->getStringFromArray($gameInfo["tags"]) . ";" .
             $this->getStringFromArray($gameInfo["publishers"]) . ";" .
             $this->getStringFromArray($gameInfo["platforms"]) . "\n";
-        fwrite($file, $gameInfoString);
-        fclose($file);
+        file_put_contents('../files/game/currentGame.csv', $gameInfoString, FILE_APPEND);
     }
 
 
@@ -187,8 +174,7 @@ class gestioreGioco
 
         $guessInfoArray = $this->checkCorrectAnswer($gameInfo);
         if ($guessInfoArray == 1) {
-            //file_put_contents('../files/game/currentGame.csv', '');
-            $_SESSION["game"] = "WIN";
+            $_SESSION["game"] = "WINGTG";
 
             return 1;
         }
@@ -283,6 +269,11 @@ class gestioreGioco
         
     }
 
+    public function stampaImmagine($immagine)
+    {
+        echo "<img src=$immagine alt='screen del gioco' style='width: 1000px; height: auto;'>";
+    }
+
     private function getClassArray($guessInfoArray)
     {
         $classArray = array();
@@ -320,26 +311,30 @@ class gestioreGioco
         return $classArray;
     }
 
-    public function addWin()
+    public function addWin($modalita)
     {
-
+        if($modalita == "GTG")
+            $campoGiusto = 2;
+        else if ($modalita == "GTS")
+            $campoGiusto = 3;
+        else
+            return;
+        
         if (isset($_SESSION["username"])) {
             $username = $_SESSION["username"];
-            $file = file_get_contents('../files/users/users.csv');
+            $file = trim(file_get_contents('../files/users/users.csv'));
             $users = explode("\n", $file);
             $newFile = "";
             foreach ($users as $user) {
                 $campi = explode(";", $user);
                 if (count($campi) >= 3 && $campi[0] == $username) {
-                    $campi[2] = $campi[2] + 1;
+                    $campi[$campoGiusto] = $campi[$campoGiusto] + 1;
                 }
                 $newFile .= implode(";", $campi) . "\n";
             }
             file_put_contents('../files/users/users.csv', $newFile);
         }
     }
-
-
 }
 $gioco = new gestioreGioco();
 /*

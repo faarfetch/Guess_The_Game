@@ -9,10 +9,10 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 }
 include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
-if(!isset($_SESSION["game"]) || $_SESSION["game"] == ""){
+if(!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTS"){
     $_SESSION["game"] = "GTG";
     $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
-    //print_r($_SESSION["answer"]["nome"]);
+    print_r($_SESSION["answer"]["nome"]);
 
 }
 

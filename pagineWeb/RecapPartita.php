@@ -57,10 +57,8 @@ if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
 
 
         $currentGame = file_get_contents("../files/game/currentGame.csv");
-        //echo $currentGame;
 
         $tentativi = explode("\n", $currentGame);
-        //print_r($tentativi);
 
         foreach ($tentativi as $tentativo) {
             $caratteristicheGioco = explode(";", $tentativo);

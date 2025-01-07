@@ -22,6 +22,8 @@
         <div style="display: flex; justify-content: space-around; gap: 200px;">
             <div>
                 <?php
+
+                //funzione che stampa la classifica in una table
                 function stampaClassifica($classifica)
                 {
                     $posizione = 1;

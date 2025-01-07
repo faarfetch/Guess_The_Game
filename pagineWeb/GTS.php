@@ -13,7 +13,6 @@ $gestoreGioco = new gestioreGioco();
 if (!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTG") {
     $_SESSION["game"] = "GTS";
     $_SESSION["screenAnswer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
-    //print_r($_SESSION["screenAnswer"]["game"]);
     //print ($_SESSION["screenAnswer"]);
 
 }

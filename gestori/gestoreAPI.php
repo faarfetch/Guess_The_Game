@@ -1,55 +1,59 @@
 <?php
-//utilizzata per infaccaire le API di rawg.io
+//utilizzata per interfacciarsi con le API di rawg.io
 class GestoreAPI
 {
 
+    private $__APIKEY = "32afb6ae78a34aef86706e686d43fea5"; //DA NASCONDERE!!!!!!! // Chiave API per accedere ai servizi di rawg.io
 
-    private $__APIKEY = "32afb6ae78a34aef86706e686d43fea5"; //DA NASCONDERE!!!!!!!
-
-    public function __construct() {}
+    public function __construct() {} // Costruttore vuoto della classe
 
     public function getGameList($starting = 1, $ending = 50)
     {
-        $url = "https://api.rawg.io/api/games?key=" . $this->__APIKEY . "&page_size=" . 40;
-        $gameList = [];
+        // Metodo per ottenere una lista di giochi da rawg.io
+        $url = "https://api.rawg.io/api/games?key=" . $this->__APIKEY . "&page_size=" . 40; // URL base delle API con parametri
+        $gameList = []; // Array per memorizzare i risultati dei giochi
 
         for ($i = $starting; $i <= $ending; $i++) {
-            $curl = curl_init();
-            curl_setopt($curl, CURLOPT_URL, $url . "&page=" . $i);
-            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+            // Ciclo per effettuare richieste su più pagine di risultati
+            $curl = curl_init(); // Inizializza una sessione cURL
+            curl_setopt($curl, CURLOPT_URL, $url . "&page=" . $i); // Imposta l'URL con il numero di pagina
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // Restituisce il risultato come stringa
 
-            $response = curl_exec($curl);
-            curl_close($curl);
+            $response = curl_exec($curl); // Esegue la richiesta
+            curl_close($curl); // Chiude la sessione cURL
 
-            $response = json_decode($response, true);
+            $response = json_decode($response, true); // Decodifica la risposta JSON
             if (isset($response['results'])) {
-                $gameList = array_merge($gameList, $response['results']);
+                // Controlla se la risposta contiene risultati
+                $gameList = array_merge($gameList, $response['results']); // Aggiunge i risultati all'array
             }
         }
-        return $gameList;
+        return $gameList; // Restituisce la lista dei giochi
     }
 
     public function getAllGamesName()
     {
-        $gameList = $this->getGameList();
+        // Metodo per ottenere i nomi di tutti i giochi
+        $gameList = $this->getGameList(); // Ottiene la lista completa dei giochi
 
-        $gameNames = array_column($gameList, 'name');
-        return $gameNames;
+        $gameNames = array_column($gameList, 'name'); // Estrae la colonna "name" da ogni gioco
+        return $gameNames; // Restituisce i nomi dei giochi
     }
 
     public function refreshGameFile() //NON UTILIZZATO
     {
-        $gameNames = $this->getAllGamesName();
-        $filePath = "../files/gamelist.json";
+        // Metodo per aggiornare il file contenente i nomi dei giochi
+        $gameNames = $this->getAllGamesName(); // Ottiene i nomi dei giochi
+        $filePath = "../files/gamelist.json"; // Percorso del file da aggiornare
 
-        // Read the existing content of the file
+        // Legge il contenuto esistente del file
         $existingContent = file_get_contents($filePath);
         $existingArray = json_decode($existingContent, true);
 
-        // Merge the existing content with the new game names and remove duplicates
+        // Unisce il contenuto esistente con i nuovi nomi e rimuove i duplicati
         $newContent = array_unique(array_merge($existingArray, $gameNames));
 
-        // Write the merged content back to the file
+        // Scrive il contenuto unificato nel file
         $gameFile = fopen($filePath, "w");
         fwrite($gameFile, json_encode($newContent, JSON_PRETTY_PRINT));
         fclose($gameFile);
@@ -57,31 +61,34 @@ class GestoreAPI
 
     public function getGameId($gameName)
     {
+        // Metodo per ottenere l'ID di un gioco dato il nome
         $url = "https://api.rawg.io/api/games?search=" . urlencode($gameName) . "&key=" . $this->__APIKEY;
 
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
+        $curl = curl_init(); // Inizializza una sessione cURL
+        curl_setopt($curl, CURLOPT_URL, $url); // Imposta l'URL della richiesta
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1); // Restituisce il risultato come stringa
 
-        $response = curl_exec($curl);
-        curl_close($curl);
-        $response = json_decode($response, true);
-
+        $response = curl_exec($curl); // Esegue la richiesta
+        curl_close($curl); // Chiude la sessione cURL
+        $response = json_decode($response, true); // Decodifica la risposta JSON
 
         if (isset($response['results'][0]['id'])) {
+            // Restituisce l'ID del primo risultato
             return $response['results'][0]['id'];
         } else {
-            return null;
+            return null; // Restituisce null se non trova l'ID
         }
     }
 
-    public function getGameInfo($id) //funaziona anche con il nome del gioco
+    public function getGameInfo($id) //funziona anche con il nome del gioco
     {
+        // Metodo per ottenere le informazioni di un gioco dato l'ID o il nome
         if (!is_numeric($id)) {
+            // Se l'ID non è numerico, lo converte da nome
             $id = $this->getGameId($id);
         }
 
-        $url = "https://api.rawg.io/api/games/" . $id . "?key=" . $this->__APIKEY;
+        $url = "https://api.rawg.io/api/games/" . $id . "?key=" . $this->__APIKEY; // URL per ottenere le informazioni del gioco
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_URL, $url);
@@ -90,13 +97,14 @@ class GestoreAPI
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return json_decode($response, true);
+        return json_decode($response, true); // Restituisce le informazioni del gioco
     }
 
     public function getGameScreenShots($id)
     {
+        // Metodo per ottenere gli screenshot di un gioco dato l'ID o il nome
         if (!is_numeric($id)) {
-            $id = $this->getGameId($id);
+            $id = $this->getGameId($id); // Converte il nome in ID se necessario
         }
 
         $url = "https://api.rawg.io/api/games/" . $id . "/screenshots" . "?key=" . $this->__APIKEY;
@@ -108,25 +116,7 @@ class GestoreAPI
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return json_decode($response, true);
-    }
-
-    public function getGameAchievements($id)
-    {
-        if (!is_numeric($id)) {
-            $id = $this->getGameId($id);
-        }
-
-        $url = "https://api.rawg.io/api/games/" . $id . "/achievements" . "?key=" . $this->__APIKEY;
-
-        $curl = curl_init();
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);
-
-        $response = curl_exec($curl);
-        curl_close($curl);
-
-        return json_decode($response, true);
+        return json_decode($response, true); // Restituisce gli screenshot del gioco
     }
 }
 
@@ -155,4 +145,3 @@ foreach($API->getGameScreenShots("Outer Wilds")['results'] as $screenshot) {
     echo "<img src='" . $screenshot['image'] . "' alt=''>";
 }
 */
-

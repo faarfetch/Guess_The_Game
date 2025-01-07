@@ -9,27 +9,17 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 }
 include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
-if(!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTS"){
+
+//se la sessione Game non è stata inizializzata la inizializza
+if (!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTS") {
     $_SESSION["game"] = "GTG";
     $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
-    print_r($_SESSION["answer"]["nome"]);
-
-}
-
-if((isset($_SESSION["answer"]) && ($_SESSION["answer"] != ""))){
     //print_r($_SESSION["answer"]["nome"]);
+
 }
 
-if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
-
-    if($_SESSION["game"] == "WIN"){
-        $_SESSION["game"] = "";
-        $_SESSION["answer"] = "";
-        //print_r("palle");
-        header("location: RecapPartita.php?msg=hai vinto");
-        exit();
-    }
-
+if ((isset($_SESSION["answer"]) && ($_SESSION["answer"] != ""))) {
+    //print_r($_SESSION["answer"]["nome"]);
 }
 
 
@@ -91,7 +81,7 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
 <body>
     <?php include 'header.php'; ?>
     <div id="container">
-        
+
         <h1>Guess The Game</h1>
         <form method="post" action="">
             <input type="text" name="guess" id="guess" style="color: black;" onkeyup="showSuggestions(this.value)">
@@ -100,10 +90,11 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
         </form>
         <div id="guesses">
             <?php
+            //se il guess è giusto vince
             if (isset($_POST['submit'])) {
                 $gestoreGioco = new gestioreGioco();
-                if($gestoreGioco->guess($_POST['guess'])==1){
-                    
+                if ($gestoreGioco->guess($_POST['guess']) == 1) {
+
                     header("location: recapPartita.php?msg=hai vinto");
                     exit();
                 }
@@ -115,42 +106,46 @@ if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){
     </div>
 
     <script>
-    let games = <?php echo json_encode(file_get_contents('../files/altro/gamelist.json')); ?>;
-    games = JSON.parse(games);
+        //script per i consigli mentre si scrive
 
-    // Function to show suggestions
-    function showSuggestions(query) {
-        const suggestionsBox = document.getElementById("suggestions");
-        suggestionsBox.innerHTML = ""; // Clear previous suggestions
 
-        if (query.length === 0) {
-            suggestionsBox.style.display = "none"; // Hide suggestions if query is empty
-            return;
+
+        let games = <?php echo json_encode(file_get_contents('../files/altro/gamelist.json')); ?>;
+        games = JSON.parse(games);
+
+        // Function to show suggestions
+        function showSuggestions(query) {
+            const suggestionsBox = document.getElementById("suggestions");
+            suggestionsBox.innerHTML = ""; // Clear previous suggestions
+
+            if (query.length === 0) {
+                suggestionsBox.style.display = "none"; // Hide suggestions if query is empty
+                return;
+            }
+
+            // Filter games based on user input
+            const filteredGames = games.filter(game => game.toLowerCase().includes(query.toLowerCase()));
+
+            if (filteredGames.length === 0) {
+                suggestionsBox.style.display = "none"; // Hide if no suggestions
+                return;
+            }
+
+            // Display suggestions
+            suggestionsBox.style.display = "block";
+            filteredGames.forEach(game => {
+                const div = document.createElement("div");
+                div.textContent = game;
+                div.style.padding = "5px";
+                div.style.cursor = "pointer";
+                div.onclick = () => {
+                    document.getElementById("guess").value = game;
+                    suggestionsBox.style.display = "none"; // Hide suggestions after selection
+                };
+                suggestionsBox.appendChild(div);
+            });
         }
-
-        // Filter games based on user input
-        const filteredGames = games.filter(game => game.toLowerCase().includes(query.toLowerCase()));
-
-        if (filteredGames.length === 0) {
-            suggestionsBox.style.display = "none"; // Hide if no suggestions
-            return;
-        }
-
-        // Display suggestions
-        suggestionsBox.style.display = "block";
-        filteredGames.forEach(game => {
-            const div = document.createElement("div");
-            div.textContent = game;
-            div.style.padding = "5px";
-            div.style.cursor = "pointer";
-            div.onclick = () => {
-                document.getElementById("guess").value = game;
-                suggestionsBox.style.display = "none"; // Hide suggestions after selection
-            };
-            suggestionsBox.appendChild(div);
-        });
-    }
-</script>
+    </script>
 
 </body>
 

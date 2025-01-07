@@ -1,11 +1,15 @@
 <?php
 //gestore degli utenti
 
+
+//classe che gestisce gli utenti
 class gestoreUtenti
 {
 
     public function __construct() {}
 
+
+    //funzione di login che controlla se il nome e la pwd combaciano e ritorna 1 se è valido e 0 se non lo è
     public function login($nome, $password)
     {
         $filePath = file_get_contents("../files/users/users.csv");
@@ -19,6 +23,8 @@ class gestoreUtenti
         return 0;
     }
 
+
+    //se il nome utente non è gia stato usato e non ha il carattere ; al suo intrerno crea il nuovo utente e lo aggiuge al file ritorna 0 se va male 1 se va tutto bene
     public function registrazione($nome, $password)
     {
         if (strpos($nome, ";") !== false || strpos($password, ";") !== false) {
@@ -41,6 +47,8 @@ class gestoreUtenti
         return 1;
     }
 
+
+    //ritorna la classifica gia ordinata della modalita scelta ("GTS"/"GTG")
     public function getClassifica($modalita)
     {
 

@@ -19,3 +19,102 @@ body {
     height: 100vh;
     padding-top: 20px;
 }
+
+img{
+    width: 300px;
+    height: auto;
+}
+
+h1 {
+    font-family: 'Arial Black', Gadget, sans-serif;
+    font-size: 4rem;
+    color: #ff6347; /* Colore vivace (rosso corallo) */
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(90deg, #ff7f50, #ff4500, #ff6347);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 20px 0;
+  }
+
+  input[type="text"] {
+    margin-bottom: 20px;
+  }
+
+  .icone{
+    width: 200px;
+    height: auto;
+  }
+  
+  div {
+    font-family: 'Poppins', sans-serif; /* Font moderno e leggibile */
+    font-size: 1rem; /* Dimensione leggibile per il testo */
+    color: #ffffff; /* Testo di colore scuro per un buon contrasto */
+    line-height: 1.6; /* Spaziatura tra le righe per una leggibilità migliore */
+    letter-spacing: 0.5px; /* Leggero spazio tra le lettere */
+    margin: 10px 0;
+  }
+  
+
+th, td {
+    width: 100px;
+    height: auto;
+    text-align: center;
+  }
+
+  h2 {
+    font-family: 'Poppins', sans-serif; /* Font moderno e leggibile */
+    font-size: 2.5rem;
+    color: #ffffff; /* Colore iniziale del testo */
+    text-align: center;
+    text-transform: capitalize;
+    letter-spacing: 1.5px;
+    background: linear-gradient(90deg, #4682b4, #5f9ea0, #87ceeb); /* Gradiente blu/verde acqua */
+    -webkit-background-clip: text; /* Clip sfondo al testo */
+    -webkit-text-fill-color: transparent; /* Rende il testo trasparente per il gradiente */
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3); /* Aggiunge profondità */
+    border: 2px solid transparent;
+    border-image: linear-gradient(90deg, #4682b4, #5f9ea0, #87ceeb) 1; /* Bordo con gradiente */
+    padding: 10px 20px;
+    margin: 20px auto;
+    display: inline-block;
+    border-radius: 10px; /* Arrotonda gli angoli */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombra per profondità */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  
+  h2:hover{
+    transform: scale(1.05); /* Leggera espansione al passaggio del mouse */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Ombra più pronunciata */
+  }
+
+  button {
+    font-family: 'Poppins', sans-serif; /* Font leggibile e moderno */
+    font-size: 1.2rem; /* Dimensione del testo */
+    color: #ffffff; /* Testo bianco per contrasto */
+    background: linear-gradient(90deg, #ff6347, #ff4500, #ff7f50); /* Gradiente caldo (rosso corallo) */
+    border: none; /* Rimuove il bordo standard */
+    border-radius: 8px; /* Arrotonda gli angoli */
+    padding: 10px 20px; /* Spaziatura interna */
+    text-transform: uppercase; /* Tutto maiuscolo per evidenziare il testo */
+    letter-spacing: 1px; /* Spaziatura tra le lettere */
+    cursor: pointer; /* Mostra il puntatore mano */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* Aggiunge un'ombra per profondità */
+    transition: all 0.3s ease; /* Effetto di transizione fluida */
+  }
+  
+  button:hover {
+    background: linear-gradient(90deg, #ff7f50, #ff4500, #ff6347); /* Gradiente invertito */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.3); /* Ombra più pronunciata */
+    transform: translateY(-2px); /* Solleva il bottone */
+  }
+  
+  button:active {
+    transform: translateY(2px); /* Effetto pressione */
+    box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2); /* Ombra ridotta */
+  }
+  
+
+  

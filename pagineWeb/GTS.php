@@ -14,7 +14,7 @@ if (!isset($_SESSION["game"]) || $_SESSION["game"] == "") {
     $_SESSION["game"] = "GTS";
     $_SESSION["screenAnswer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
     //print_r($_SESSION["screenAnswer"]["game"]);
-    print ($_SESSION["screenAnswer"]);
+    //print ($_SESSION["screenAnswer"]);
 
 }
 
@@ -52,10 +52,6 @@ if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
     <div id="container">
         <h1>Guess The Screenshot</h1>
 
-        <?php
-
-        ?>
-
         <form method="post" action="">
             <input type="text" name="guess" id="guess" style="color: black;" onkeyup="showSuggestions(this.value)">
             <button type="submit" name="submit" style="color: black;">Indovina!</button>
@@ -71,16 +67,13 @@ if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
             if (!isset($_POST["guess"])) {
                 $giocoDaIndovinare = $_SESSION["screenAnswer"];
                 $screenGioco = $gestoreGioco->getGameImages($giocoDaIndovinare);
-                echo "<img src=$screenGioco[0] alt=>";
+                echo "<img src=$screenGioco[0]>";
             }
 
             //print_r($_SESSION["screenAnswer"]);
 
             if (isset($_POST["guess"]))
                 $gestoreGioco->giocoScreen($_POST["guess"]);
-
-
-
             ?>
 
         </div>

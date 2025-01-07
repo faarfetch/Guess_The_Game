@@ -38,8 +38,8 @@ $modalità = [
     document.addEventListener("DOMContentLoaded", function() {
 
         let divMods = document.getElementsByClassName("modalita");
-        let dGTG = "GUESS THE GAME In questa modalità dovrai indovinare il videogioco basandoti sulle sue caratteristiche e dalla visione parziale della sua copertina";
-        let dGTS = "GUESS THE SCREENSHOT In questa modalità dovrai indovinare il videogioco basandoti sullo screeenshot di una parte di gioco";
+        let dGTG = "GUESS THE GAME \nIn questa modalità dovrai indovinare il videogioco basandoti sulle sue caratteristiche e dalla visione parziale della sua copertina";
+        let dGTS = "GUESS THE SCREENSHOT \nIn questa modalità dovrai indovinare il videogioco basandoti sullo screeenshot di una parte di gioco";
 
         let divSpiegazione = document.createElement("div");
         divSpiegazione.id = "spiegazione";
@@ -81,7 +81,7 @@ $modalità = [
             <?php
             foreach ($modalità as $value) {
                 echo "<div id=$value class=modalita>";
-                echo "<img src=../files/imgs/$value.png height=200 width=200 alt=$value>";
+                echo "<img src=../files/imgs/$value.png alt=$value class=icone>";
                 echo "<h2>" . $value . "</h2>";
 
                 echo "</div>";

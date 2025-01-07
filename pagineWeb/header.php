@@ -5,8 +5,9 @@ echo ("<style>
         position: sticky;
         top: 0;
         padding: 2px 10px;
-        background: #555;
+        background: #4682b4;
         color: white;
+
     }
 </style>");
 

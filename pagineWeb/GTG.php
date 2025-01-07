@@ -12,12 +12,12 @@ $gestoreGioco = new gestioreGioco();
 if(!isset($_SESSION["game"]) || $_SESSION["game"] == ""){
     $_SESSION["game"] = "GTG";
     $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
-    print_r($_SESSION["answer"]["nome"]);
+    //print_r($_SESSION["answer"]["nome"]);
 
 }
 
 if((isset($_SESSION["answer"]) && ($_SESSION["answer"] != ""))){
-    print_r($_SESSION["answer"]["nome"]);
+    //print_r($_SESSION["answer"]["nome"]);
 }
 
 if((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))){

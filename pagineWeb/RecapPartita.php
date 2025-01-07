@@ -35,6 +35,7 @@ if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
     <title>Riepilogo Partita</title>
 </head>
 <link rel="stylesheet" href="../style/general.css">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <body>
     <?php include 'header.php'; ?>
@@ -44,8 +45,9 @@ if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
         if (isset($_GET["msg"])) {
             echo ("<h1>" . $_GET["msg"] . "</h1>");
         }
-        echo "<h1>Riepilogo Partita</h1>";
+        echo "<h2>Riepilogo Partita</h1>";
 
+        echo "<div id=recap>";
         $numOfGuesses = count(file("../files/game/currentGame.csv"));
         echo "Tentativi effettuati: " . $numOfGuesses . "<br>";
 
@@ -60,9 +62,11 @@ if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
             $caratteristicheGioco = explode(";", $tentativo);
             echo $caratteristicheGioco[0] . "<br>";
         }
+        echo "</div>";
+        
         ?>
 
-        <a href="GTG.php"><button style="color: black;">Gioca ancora!</button></a>
+        <a href="home.php"><button style="color: black;">Gioca ancora!</button></a>
     </div>
 </body>
 

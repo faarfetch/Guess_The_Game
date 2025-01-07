@@ -21,7 +21,7 @@ class gestioreGioco
         file_get_contents('../files/altro/gamelist.json');
         $games = json_decode(file_get_contents('../files/altro/gamelist.json'), true);
         $randomIndex = array_rand($games);
-        print_r($games[$randomIndex]);
+        //print_r($games[$randomIndex]);
         if ($modalita === "GTG")
             return $this->getGameInfo($games[$randomIndex]);
         else
@@ -39,12 +39,12 @@ class gestioreGioco
         echo ("<div>vite rimanenti: " . $vite-count(file("../files/game/currentGame.csv")) . "</div>");
 
         if ($this->controlloGuess($guess)) {
-            header("location: ../recapPartita.php?msg=hai vinto");
+            header("location: ../pagineWeb/RecapPartita.php?msg=hai vinto");
             exit;
         } else {
             file_put_contents('../files/game/currentGame.csv', $guess . "\n", FILE_APPEND);
             if ($vite == count(file("../files/game/currentGame.csv"))) {
-                header("location: ../RecapPartita.php?msg=hai perso");
+                header("location: ../pagineWeb/RecapPartita.php?msg=hai perso");
                 exit;
             }
         }
@@ -263,17 +263,24 @@ class gestioreGioco
         if ($gameInfo['meta'] == null) {
             $gameInfo['meta'] = "N/A";
         }
-        echo ("<div class='guess'>");
-        echo ("<div class='guess_element' style='background-image: url(" . $gameInfo['immagine'] . ");'>" . $gameInfo['nome'] . "</div>");
-        echo ("<div class='guess_element " . $classArray["data"] . "'>" . $gameInfo['data'] . "</div>");
-        echo ("<div class='guess_element " . $classArray["playtime"] . "'>" . $gameInfo['playtime'] . "</div>");
-        echo ("<div class='guess_element " . $classArray["generi"] . "'>" . $this->getStringFromArray($gameInfo['generi']) . "</div>");
-        echo ("<div class='guess_element " . $classArray["tags"] . "'>" . $this->getStringFromArray($gameInfo['tags']) . "</div>");
-        echo ("<div class='guess_element " . $classArray["platforms"] . "'>" . $this->getStringFromArray($gameInfo['platforms']) . "</div>");
-        echo ("<div class='guess_element " . $classArray["publishers"] . "'>" . $this->getStringFromArray($gameInfo['publishers']) . "</div>");
-        echo ("<div class='guess_element " . $classArray["rating"] . "'>" . $gameInfo['rating'] . "</div>");
-        echo ("<div class='guess_element " . $classArray["meta"] . "' style='background-image: url(\"../files/imgs/Metacritic.png\");'>" . $gameInfo['meta'] . "</div>");
-        echo ("</div>");
+        echo "<table class='guess'>";
+        echo "<tr><th>Image</th><th>Name</th><th>Release Date</th><th>Playtime</th><th>Genres</th><th>Tags</th><th>Platforms</th><th>Publishers</th><th>Rating</th><th>Metacritic</th></tr>";
+        echo "<tr>";
+        echo "<td class='guess_element' style='background-image: url(" . $gameInfo['immagine'] . ");'></td>";
+        echo "<td class='guess_element'>" . $gameInfo['nome'] . "</td>";
+        echo "<td class='guess_element " . $classArray["data"] . "'>" . $gameInfo['data'] . "</td>";
+        echo "<td class='guess_element " . $classArray["playtime"] . "'>" . $gameInfo['playtime'] . "</td>";
+        echo "<td class='guess_element " . $classArray["generi"] . "'>" . $this->getStringFromArray($gameInfo['generi']) . "</td>";
+        echo "<td class='guess_element " . $classArray["tags"] . "'>" . $this->getStringFromArray($gameInfo['tags']) . "</td>";
+        echo "<td class='guess_element " . $classArray["platforms"] . "'>" . $this->getStringFromArray($gameInfo['platforms']) . "</td>";
+        echo "<td class='guess_element " . $classArray["publishers"] . "'>" . $this->getStringFromArray($gameInfo['publishers']) . "</td>";
+        echo "<td class='guess_element " . $classArray["rating"] . "'>" . $gameInfo['rating'] . "</td>";
+        echo "<td class='guess_element " . $classArray["meta"] . "' style='background-image: url(\"../files/imgs/Metacritic.png\");'>" . $gameInfo['meta'] . "</td>";
+        echo "</tr>";
+        echo "</table>";
+
+
+        
     }
 
     private function getClassArray($guessInfoArray)

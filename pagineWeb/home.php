@@ -68,9 +68,9 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
             foreach ($scelteUtente as $value) {
                 echo "<div id=$value class='scelte'>";
-                echo "<img src='../files/imgs/$value.png' alt='$value'>
+                echo "<img src='../files/imgs/$value.png' alt='$value' class='icone'><br>
                     <br>
-                    <label for='$value'>$value</label>";
+                    <label for='$value'>$value</label class='icone'>";
                 echo "</div>";
             }
             ?>

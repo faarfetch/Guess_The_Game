@@ -10,26 +10,15 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
 include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
-if (!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTG") {
-    $_SESSION["game"] = "GTS";
-    $_SESSION["screenAnswer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
+if (!isset($_SESSION["gameMode"]) || $_SESSION["gameMode"] == "" || $_SESSION["gameMode"] == "GTG") {
+    $_SESSION["gameMode"] = "GTS";
+    $_SESSION["screenAnswer"] = $gestoreGioco->getRandomGame($_SESSION["gameMode"]);
     //print ($_SESSION["screenAnswer"]);
 
 }
 
 if ((isset($_SESSION["screenAnswer"]) && ($_SESSION["screenAnswer"] != ""))) {
     //print_r($_SESSION["screenAnswer"]);
-}
-
-if ((isset($_SESSION["game"]) && ($_SESSION["game"] != ""))) {
-
-    if ($_SESSION["game"] == "WIN") {
-        $_SESSION["game"] = "";
-        $_SESSION["screenAnswer"] = "";
-        //print_r("palle");
-        header("location: RecapPartita.php?msg=hai vinto");
-        exit();
-    }
 }
 
 

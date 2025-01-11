@@ -47,7 +47,8 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
 
                 div.addEventListener("click", function() {
                     let nome = div.id;
-                    if (nome === "daily")
+                    if (
+                        nome === "daily")
                         window.location.href = "GTG.php";
                     else
                         window.location.href = nome + ".php";

@@ -40,25 +40,6 @@ class GestoreAPI
         return $gameNames; // Restituisce i nomi dei giochi
     }
 
-    public function refreshGameFile() //NON UTILIZZATO
-    {
-        // Metodo per aggiornare il file contenente i nomi dei giochi
-        $gameNames = $this->getAllGamesName(); // Ottiene i nomi dei giochi
-        $filePath = "../files/gamelist.json"; // Percorso del file da aggiornare
-
-        // Legge il contenuto esistente del file
-        $existingContent = file_get_contents($filePath);
-        $existingArray = json_decode($existingContent, true);
-
-        // Unisce il contenuto esistente con i nuovi nomi e rimuove i duplicati
-        $newContent = array_unique(array_merge($existingArray, $gameNames));
-
-        // Scrive il contenuto unificato nel file
-        $gameFile = fopen($filePath, "w");
-        fwrite($gameFile, json_encode($newContent, JSON_PRETTY_PRINT));
-        fclose($gameFile);
-    }
-
     public function getGameId($gameName)
     {
         // Metodo per ottenere l'ID di un gioco dato il nome
@@ -97,7 +78,17 @@ class GestoreAPI
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return json_decode($response, true); // Restituisce le informazioni del gioco
+
+
+
+        $response = json_decode($response, true); // Decodifica la risposta JSON
+
+
+        if (isset($response['id'])) {
+            return $response; // Restituisce le informazioni del gioco se presenti
+        } else {
+            return ['error' => 'Game not found or invalid ID']; // Restituisce un messaggio di errore se non trova il gioco
+        }
     }
 
     public function getGameScreenShots($id)
@@ -116,7 +107,15 @@ class GestoreAPI
         $response = curl_exec($curl);
         curl_close($curl);
 
-        return json_decode($response, true); // Restituisce gli screenshot del gioco
+        $response = json_decode($response, true); // Decodifica la risposta JSON
+
+
+        if (isset($response['count'])) {
+            return $response; // Restituisce le informazioni del gioco se presenti
+        } else {
+            return ['error' => 'Game not found or invalid ID']; // Restituisce un messaggio di errore se non trova il gioco
+        }
+
     }
 }
 
@@ -125,17 +124,10 @@ $API = new GestoreAPI();
 print "<pre>";
 //print_r($API->getGameList()); 
 //print_r($API->getGameId("ultrakill"));
-for ($i=1; $i >0; $i++) { 
-    if(isset($API->getGameInfo($i)["id"])){
-        print_r($API->getGameInfo($i));
-        break;
-    }
-
-}
 //num of id 995589
 //print_r($API->getGameInfo("dark souls"));
 //print_r($API->getGameScreenShots(3498));
-//print_r($API->getGameScreenShots("Outer Wilds"));
+print_r($API->getGameScreenShots("Outer Wilds"));
 //print_r($API->getGameAchievements(3498));
 //print_r($API->getGameAchievements("hollow knight"));
 //tutte chiamate funzionanti che altri file possono utilizzare

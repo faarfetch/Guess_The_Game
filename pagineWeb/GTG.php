@@ -11,9 +11,9 @@ include_once '../gestori/gestoreGioco.php';
 $gestoreGioco = new gestioreGioco();
 
 //se la sessione Game non è stata inizializzata la inizializza
-if (!isset($_SESSION["game"]) || $_SESSION["game"] == "" || $_SESSION["game"] == "GTS") {
-    $_SESSION["game"] = "GTG";
-    $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["game"]);
+if (!isset($_SESSION["gameMode"]) || $_SESSION["gameMode"] == "" || $_SESSION["gameMode"] == "GTS") {
+    $_SESSION["gameMode"] = "GTG";
+    $_SESSION["answer"] = $gestoreGioco->getRandomGame($_SESSION["gameMode"]);
     //print_r($_SESSION["answer"]["nome"]);
 
 }

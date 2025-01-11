@@ -9,19 +9,17 @@ if (!isset($_SESSION["autenticato"]) || $_SESSION["autenticato"] != 1) {
     exit();
 }
 
-if (isset($_SESSION["game"]) && $_SESSION["game"] == "WINGTG") {
+if (isset($_SESSION["gameStatus"]) && $_SESSION["gameStatus"] == "WINGTG") {
     include_once '../gestori/gestoreGioco.php';
     $gestoreGioco = new gestioreGioco();
     $gestoreGioco->addWin("GTG");
+    $_SESSION["gameStatus"] = "";
 }
-if (isset($_SESSION["game"]) && $_SESSION["game"] == "WINGTS") {
+if (isset($_SESSION["gameStatus"]) && $_SESSION["gameStatus"] == "WINGTS") {
     include_once '../gestori/gestoreGioco.php';
     $gestoreGioco = new gestioreGioco();
     $gestoreGioco->addWin("GTS");
-}
-
-if (isset($_SESSION["game"]) && $_SESSION["game"] != "") {
-    $_SESSION["game"] = "";
+    $_SESSION["gameStatus"] = "";
 }
 
 if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
@@ -66,9 +64,14 @@ if (isset($_SESSION["answer"]) && $_SESSION["answer"] != "") {
         }
         echo "</div>";
         
+        echo '<a href="'.$_SESSION["gameMode"].'.php"><button style="color: black;">Gioca ancora!</button></a>';
+
+        if (isset($_SESSION["gameMode"]) && $_SESSION["gameMode"] != "") {
+            $_SESSION["gameMode"] = "";
+        }
         ?>
 
-        <a href="modalità.php"><button style="color: black;">Gioca ancora!</button></a>
+        
     </div>
 </body>
 

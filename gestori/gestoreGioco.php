@@ -30,10 +30,14 @@ class gestioreGioco
 
         $gameInfo = $this->getGameInfo($_POST['guess']);
 
+        if($gameInfo == null){
+            return 0;
+        }
+
         //gedtione della vittoria dell'utente
         $guessInfoArray = $this->checkCorrectAnswer($gameInfo);
         if ($guessInfoArray == 1) {
-            $_SESSION["game"] = "WINGTG";
+            $_SESSION["gameStatus"] = "WINGTG";
 
             return 1;
         }
@@ -56,7 +60,7 @@ class gestioreGioco
     {
         //gedtione della vittoria dell'utente
         if ($guess == $_SESSION["screenAnswer"]) {
-            $_SESSION["game"] = "WINGTS";
+            $_SESSION["gameStatus"] = "WINGTS";
             header("Location: recapPartita.php?msg=hai vinto");
             exit();
         }
@@ -113,7 +117,9 @@ class gestioreGioco
             $APIresponse = $this->API->getGameInfo($nomeGioco);
         } while ($APIresponse == null);
 
-
+        if(isset($APIresponse["error"])){
+            return null;
+        }
 
         //formatta le informazioni del gioco
         foreach ($APIresponse["genres"] as $genere) {
@@ -149,7 +155,13 @@ class gestioreGioco
     //funzione che ritorna gli screnshot del gioco che si vuole
     public function getGameImages($nomeGioco)
     {
-        $APIresponse = $this->API->getGameScreenShots($nomeGioco);
+        do {
+            $APIresponse = $this->API->getGameScreenShots($nomeGioco);
+        } while ($APIresponse == null);
+
+        if(isset($APIresponse["error"])){
+            return null;
+        }
 
         foreach ($APIresponse["results"] as $screenshot) {
             $screenshots[] = $screenshot["image"];
